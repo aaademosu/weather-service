@@ -1,6 +1,9 @@
-cControllers.controller('DashboardController', ['$scope','$http','$location','$cookies', 'Flash', function($scope,$http,$location,$cookies, Flash) {
+cControllers.controller('DashboardController', ['$scope','$http','$location','$cookies', '$q', 'Flash', function($scope,$http,$location,$cookies,$q,Flash) {
+  var deferred;
   $scope.geolocation = {};
+  $scope.afterInitialRun = false;
   $scope.submitButton = 'Get Weather Condition';
+
 
   if ($cookies.getObject('lastWeather')) {
     $scope.weather = $cookies.getObject('lastWeather');
@@ -11,11 +14,8 @@ cControllers.controller('DashboardController', ['$scope','$http','$location','$c
     $scope.geolocation = {};
   }
 
-
   $scope.locator = function(valid) {
     if (valid) {
-      // var path = 'http://api.geonames.org/findNearByWeatherJSON?lat=9&lng=7&username=prognotest'
-
       var user = 'prognotest';
       var path = 'http://api.geonames.org/findNearByWeatherJSON?lat='+$scope.geolocation.latitude+'&lng='+$scope.geolocation.longitude+'&username='+user;
       var geo = $http.get( path );
@@ -34,8 +34,34 @@ cControllers.controller('DashboardController', ['$scope','$http','$location','$c
     }
   }
 
+  function currentPosition(position) {
+    deferred.resolve({latitude: position.coords.latitude, longitude: position.coords.longitude});
+  }
+  function handleError(error) {
+    deferred.reject({msg: error.message});
+  }
+  $scope.getCurrentPositionFromBrowser = function() {
+    deferred = $q.defer();
+    if (window.navigator && window.navigator.geolocation) {
+      window.navigator.geolocation.getCurrentPosition(currentPosition, handleError);
+    } else {
+      deferred.reject({msg: "Browser does not supports HTML5 geolocation"});
+    }
+    return deferred.promise;
+  };
+
+  $scope.getCurrentPositionFromBrowser().then(function(data) {
+    if (!$cookies.getObject('lastWeather')) {
+      console.log(data.latitude, data.longitude);
+      $scope.geolocation.latitude = data.latitude;
+      $scope.geolocation.longitude = data.longitude;
+      $scope.locator(true);
+    };
+  });
+
+  $scope.showForm = function() {
+    $scope.afterInitialRun = true;
+  };
 
 }]);
-
-
 

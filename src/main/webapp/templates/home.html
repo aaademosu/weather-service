@@ -6,7 +6,11 @@
 
 <div class='pure-g'>
   <div class="pure-u-1-3">
-    <form novalidate ng-submit='locator(newGeoLocate.$valid)' name='newGeoLocate' accept-charset="UTF-8" class="pure-form pure-form-aligned " method="post">
+    <div class="pure-controls" ng-hide="afterInitialRun">
+      <button type="submit" ng-click='showForm()' class="pure-button pure-button-primary"> Show Search Form </button>
+    </div>
+
+    <form novalidate ng-show="afterInitialRun" ng-submit='locator(newGeoLocate.$valid)' name='newGeoLocate' accept-charset="UTF-8" class="pure-form pure-form-stacked " method="post">
       <div class='pure-control-group'>
         <label for="Latitude">Latitude</label>
         <input name="latitude" type="text" ng-model="geolocation.latitude" required />
@@ -23,7 +27,6 @@
     </form>
   </div>
   <div class="pure-u-2-3" ng-show="weather">
-    <!-- <h2> {{weather}} </h2> -->
     <h3>Weather Condition at {{weather.weatherObservation.stationName}}</h3>
 
     <ul ng-repeat="(k,v) in weather.weatherObservation">
@@ -31,10 +34,5 @@
     </ul>
   </div>
 </div>
-
-
-
-
-
 
 
