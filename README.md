@@ -1,6 +1,7 @@
 weather-service: Prognostore weather service
 ========================
 Author: Ayodele Ademosu
+
 Technologies: AngularJS, JSP, Wildfly, Maven
 
 
