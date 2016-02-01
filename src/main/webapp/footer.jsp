@@ -7,6 +7,8 @@
   <script src="js/libs/angular-route.min.js"></script>
   <script src="js/libs/angular-cookies.min.js"></script>
   <script src="js/libs/angular-flash.min.js"></script>
+  <script src="js/libs/ngmap.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/controllers/main-ctrl.js"></script>
   <script src="js/controllers/dashboard-ctrl.js"></script>
+ 

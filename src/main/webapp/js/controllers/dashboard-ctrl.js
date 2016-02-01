@@ -1,4 +1,4 @@
-cControllers.controller('DashboardController', ['$scope','$http','$location','$cookies', '$q', 'Flash', function($scope,$http,$location,$cookies,$q,Flash) {
+cControllers.controller('DashboardController', ['$scope','$http','$location','$cookies', '$q', 'Flash', 'NgMap', function($scope,$http,$location,$cookies,$q,Flash,NgMap) {
   var deferred;
   $scope.geolocation = {};
   $scope.afterInitialRun = false;
@@ -35,6 +35,7 @@ cControllers.controller('DashboardController', ['$scope','$http','$location','$c
   }
 
   function currentPosition(position) {
+    Flash.create('warning', '<strong> Please wait!</strong>  Retrieving the weather information.');
     deferred.resolve({latitude: position.coords.latitude, longitude: position.coords.longitude});
   }
   function handleError(error) {
@@ -62,6 +63,19 @@ cControllers.controller('DashboardController', ['$scope','$http','$location','$c
   $scope.showForm = function() {
     $scope.afterInitialRun = true;
   };
+
+  $scope.falsy = function(v) {
+    return !(v == 'lat' || v == 'lng');
+  }
+
+  $scope.reset = function() {
+    $scope.getCurrentPositionFromBrowser().then(function(data) {
+      console.log(data.latitude, data.longitude);
+      $scope.geolocation.latitude = data.latitude;
+      $scope.geolocation.longitude = data.longitude;
+      $scope.locator(true);
+    });
+  }
 
 }]);
 
